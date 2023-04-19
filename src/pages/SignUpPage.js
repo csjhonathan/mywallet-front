@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import MyWalletLogo from '../components/MyWalletLogo';
 import axios from 'axios';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 export default function SignUpPage() {
     const [form, setForm] = useState({nome : '', email : '', senha : '', confirma : ''});
-    
+    const navigate = useNavigate();
     function handleForm(key, value){
         setForm({...form, [key] : value});
     }
@@ -20,8 +21,9 @@ export default function SignUpPage() {
             senha : form.senha
         };
         try{
+            /* eslint-disable-next-line no-undef */
             await axios.post(`${process.env.REACT_APP_API_URL}/sign-up`, body);
-
+            navigate('/');
         }catch(err){
             alert(err.response.data.message);
         }
