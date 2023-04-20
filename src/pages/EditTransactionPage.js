@@ -31,6 +31,7 @@ export default function EditTransactionPage(){
             const body =  {
                 value : Number(form.value.replace(',', '.')),
                 description : form.description,
+                type : tipo
             };
             const config = {
                 headers : {
@@ -41,7 +42,7 @@ export default function EditTransactionPage(){
             await axios.put(`${process.env.REACT_APP_API_URL}/transactions/${ID}`, body, config);
             navigate('/');
         }catch(err){
-            console.log(err);
+            alert(err.response.data.message);
         }
     }
 
