@@ -10,7 +10,7 @@ export default function HomePage() {
     const [transactions, setTransactions] = useState(null);
     const [total, setTotal] = useState(null);
     const navigate = useNavigate();
-    console.log(transactions);
+
     useEffect( () => {
         if(!userData.token){
             return navigate('/');
@@ -79,7 +79,7 @@ export default function HomePage() {
                                             <span>{transaction.date}</span>
                                             <strong>{transaction.description}</strong>
                                         </div>
-                                        <Value color={transaction.type}>{transaction?.value?.toFixed(2)} <Delete onClick={() => deleteTransaction(transaction.transactionID)}/> </Value>
+                                        <Value color={transaction.type}>{Math.abs(transaction?.value)?.toFixed(2)} <Delete onClick={() => deleteTransaction(transaction.transactionID)}/> </Value>
                                         
                                     </ListItemContainer>
                                 );
@@ -90,7 +90,7 @@ export default function HomePage() {
 
                         <article>
                             <strong>Saldo</strong>
-                            <Value color={ total >= 0 ? 'deposit' : 'spent' }>{total}</Value>
+                            <Value color={ total >= 0 ? 'deposit' : 'spent' }>{Math.abs(total)?.toFixed(2)}</Value>
                         </article>
                     </>
                     :

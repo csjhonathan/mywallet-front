@@ -30,7 +30,7 @@ export default function SignInPage() {
             /* eslint-disable-next-line no-undef */
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/sign-in`, body);
             setUserData({...userData, token : response.data.token, username : response.data.nome});
-
+            console.log(response);
             localStorage.clear();
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('userName', response.data.nome);
