@@ -1,52 +1,54 @@
-import { useState, useContext, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+/* eslint-disable no-undef, no-unused-vars*/
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 import UserContext from '../contextAPI/userContext.js';
-
-export default function TransactionsPage() {
+import TransactionContext from '../contextAPI/transactionContext.js';
+import axios from 'axios';
+export default function EditTransactionPage(){
     const {tipo} = useParams();
-    const [form, setForm] = useState({value : '', description : ''});
-    const {userData} = useContext(UserContext);
     const navigate = useNavigate();
+    const {userData } = useContext(UserContext);
+    
+    const {editTransactionData, setEditTransactionData} = useContext(TransactionContext);
+    const [form, setForm] = useState({value :editTransactionData?.value.toFixed(2) , description : editTransactionData?.description});
+    
+    useEffect( () => {
+        if(!userData.token ){
+            return navigate('/');
+        }
+    },[]);
+
     function handleForm(key, value){
 
         setForm({...form, [key] : value});
     }
 
-    useEffect( () => {
-        if(!userData.token){
-            return navigate('/');
-        }
-    },[]);
-    
-    async function sendTransaction(e){
+    async function editTransaction(e){
         e.preventDefault();
-        const body = {
-            value : Number(form.value.replace(',', '.')),
-            description : form.description,
-            type : tipo,
-        };
         try{
-            if(!userData.token){
-                navigate('/');
-            }
+            
+            const body =  {
+                value : Number(form.value.replace(',', '.')),
+                description : form.description,
+            };
             const config = {
                 headers : {
                     'Authorization' : `Bearer ${userData.token}`
                 }
             };
-            /* eslint-disable-next-line no-undef */
-            await axios.post(`${process.env.REACT_APP_API_URL}/transactions`, body, config);
-            navigate('/home');
+            const ID = editTransactionData.ID;
+            await axios.put(`${process.env.REACT_APP_API_URL}/transactions/${ID}`, body, config);
+            navigate('/');
         }catch(err){
-            alert(err.response.data.message);
+            console.log(err);
         }
     }
-    return (
+
+    return(
         <TransactionsContainer>
-            <h1>Nova {tipo === 'deposit' ? 'entrada' : 'saída'}</h1>
-            <form onSubmit={sendTransaction}> 
+            <h1>Editar {tipo === 'deposit' ? 'entrada' : 'saída'}</h1>
+            <form onSubmit={editTransaction}> 
                 <input placeholder="Valor" 
                     type = "text"
                     name = "value"
@@ -61,12 +63,11 @@ export default function TransactionsPage() {
                     value={form.description}
                     onChange={(e) => handleForm(e.target.name, e.target.value)}
                 />
-                <button>Salvar {tipo === 'deposit' ? 'entrada' : 'saída'}</button>
+                <button>Atualizar {tipo === 'deposit' ? 'entrada' : 'saída'}</button>
             </form>
         </TransactionsContainer>
     );
 }
-
 const TransactionsContainer = styled.main`
   height: calc(100vh - 50px);
   display: flex;

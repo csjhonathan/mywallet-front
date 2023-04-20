@@ -4,9 +4,11 @@ import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import UserContext from '../contextAPI/userContext.js';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import TransactionContext from '../contextAPI/transactionContext.js';
 import axios from 'axios';
 export default function HomePage() {
     const {userData} = useContext(UserContext);
+    const {editTransactionData, setEditTransactionData} = useContext(TransactionContext);
     const [transactions, setTransactions] = useState(null);
     const [total, setTotal] = useState(null);
     const navigate = useNavigate();
@@ -62,6 +64,11 @@ export default function HomePage() {
         }
     }
 
+    function editTransactionByID(description, type, ID, value){
+        
+        setEditTransactionData({...editTransactionData, description, value, ID});
+        navigate(`/editar-registro/${type}`);
+    }
     return (
         <HomeContainer>
             <Header>
@@ -77,7 +84,7 @@ export default function HomePage() {
                                     <ListItemContainer key={transaction.transactionID}>
                                         <div>
                                             <span>{transaction.date}</span>
-                                            <strong>{transaction.description}</strong>
+                                            <strong onClick={() => editTransactionByID(transaction.description, transaction.type, transaction.transactionID, Math.abs(transaction.value))}>{transaction.description}</strong>
                                         </div>
                                         <Value color={transaction.type}>{Math.abs(transaction?.value)?.toFixed(2)} <Delete onClick={() => deleteTransaction(transaction.transactionID)}/> </Value>
                                         
