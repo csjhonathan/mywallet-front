@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { BiExit } from 'react-icons/bi';
+import { BiExit, BiX } from 'react-icons/bi';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import UserContext from '../contextAPI/userContext.js';
 import { useContext, useEffect, useState } from 'react';
@@ -10,7 +10,7 @@ export default function HomePage() {
     const [transactions, setTransactions] = useState(null);
     const [total, setTotal] = useState(null);
     const navigate = useNavigate();
-
+    console.log(transactions);
     useEffect( () => {
         if(!userData.token){
             return navigate('/');
@@ -26,15 +26,13 @@ export default function HomePage() {
                 }
             };
 
-            console.log(userData.token);
             /* eslint-disable-next-line no-undef */
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/transactions`, config);
-            console.log(response);
             setTransactions(response.data.transactions);
             setTotal(response.data.total ? Number(response.data.total).toFixed(2) : '00.00');
             
         }catch(err){
-            console.log(err);
+            alert(err.response.data.message);
         }
     }
 
@@ -46,24 +44,43 @@ export default function HomePage() {
         localStorage.clear();
         navigate('/');
     }
+
+    async function deleteTransaction(ID){
+        if(window.confirm('Deseja excluir esta transação ?')){
+            try{
+                const config = {
+                    headers : {
+                        'Authorization' : `Bearer ${userData.token}`
+                    }
+                };
+                /* eslint-disable-next-line no-undef */
+                await axios.delete(`${process.env.REACT_APP_API_URL}/transactions/${ID}`, config);
+                getTransactions();
+            }catch(err){
+                alert(err.response.data.message);
+            }
+        }
+    }
+
     return (
         <HomeContainer>
             <Header>
                 <h1>Olá, {userData.username}</h1>
                 <BiExit onClick={logOut}/>
             </Header>
-            <TransactionsContainer hasTransactions = {!!transactions}>
+            <TransactionsContainer hasTransactions = {!(!!transactions && !transactions?.length || !transactions )}>
                 {transactions && transactions.length > 0 ?
                     <>
                         <ul>
-                            {transactions.map((transaction, index) => {
+                            {transactions.map((transaction) => {
                                 return (
-                                    <ListItemContainer key={index}>
+                                    <ListItemContainer key={transaction.transactionID}>
                                         <div>
                                             <span>{transaction.date}</span>
                                             <strong>{transaction.description}</strong>
                                         </div>
-                                        <Value color={transaction.type}>{transaction.value}</Value>
+                                        <Value color={transaction.type}>{transaction.value.toFixed(2)} <Delete onClick={() => deleteTransaction(transaction.transactionID)}/> </Value>
+                                        
                                     </ListItemContainer>
                                 );
                             })
@@ -180,4 +197,8 @@ const MessageContainer = styled.div`
   width: 150px;
   text-align: center;
   color: #868686;
+`;
+
+const Delete = styled(BiX)`
+  color: #c6c6c6;
 `;

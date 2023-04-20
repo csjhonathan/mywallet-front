@@ -23,7 +23,7 @@ export default function TransactionsPage() {
     async function sendTransaction(e){
         e.preventDefault();
         const body = {
-            value : form.value.replace(',', '.'),
+            value : Number(form.value.replace(',', '.')),
             description : form.description,
             type : tipo,
         };
@@ -40,7 +40,7 @@ export default function TransactionsPage() {
             await axios.post(`${process.env.REACT_APP_API_URL}/transactions`, body, config);
             navigate('/home');
         }catch(err){
-            console.log(err);
+            alert(err.response.data.message);
         }
     }
     return (
@@ -59,7 +59,7 @@ export default function TransactionsPage() {
                     required
                     onChange={(e) => handleForm(e.target.name, e.target.value)}
                 />
-                <button>Salvar TRANSAÇÃO</button>
+                <button>Salvar {tipo === 'deposit' ? 'entrada' : 'saída'}</button>
             </form>
         </TransactionsContainer>
     );
