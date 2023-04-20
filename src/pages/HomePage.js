@@ -1,50 +1,94 @@
 import styled from 'styled-components';
 import { BiExit } from 'react-icons/bi';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
-
+import UserContext from '../contextAPI/userContext.js';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 export default function HomePage() {
+    const {userData} = useContext(UserContext);
+    const [transactions, setTransactions] = useState(null);
+    const [total, setTotal] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect( () => {
+        if(!userData.token){
+            return navigate('/');
+        }
+        getTransactions();
+    },[]);
+
+    async function getTransactions(){
+        try{
+            const config = {
+                headers : {
+                    'Authorization' : `Bearer ${userData.token}`
+                }
+            };
+
+            console.log(userData.token);
+            /* eslint-disable-next-line no-undef */
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/transactions`, config);
+            console.log(response);
+            setTransactions(response.data.transactions);
+            setTotal(response.data.total ? Number(response.data.total).toFixed(2) : '00.00');
+            
+        }catch(err){
+            console.log(err);
+        }
+    }
+
+    function newTransaction(type){
+        navigate(`/nova-transacao/${type}`);
+    }
     return (
         <HomeContainer>
             <Header>
-                <h1>Olá, Fulano</h1>
+                <h1>Olá, {userData.username}</h1>
                 <BiExit />
             </Header>
+            <TransactionsContainer hasTransactions = {!!transactions}>
+                {transactions && transactions.length > 0 ?
+                    <>
+                        <ul>
+                            {transactions.map((transaction, index) => {
+                                return (
+                                    <ListItemContainer key={index}>
+                                        <div>
+                                            <span>{transaction.date}</span>
+                                            <strong>{transaction.description}</strong>
+                                        </div>
+                                        <Value color={transaction.type}>{transaction.value}</Value>
+                                    </ListItemContainer>
+                                );
+                            })
+                        
+                            }
+                        </ul>
 
-            <TransactionsContainer>
-                <ul>
-                    <ListItemContainer>
-                        <div>
-                            <span>30/11</span>
-                            <strong>Almoço mãe</strong>
-                        </div>
-                        <Value color={'negativo'}>120,00</Value>
-                    </ListItemContainer>
-
-                    <ListItemContainer>
-                        <div>
-                            <span>15/11</span>
-                            <strong>Salário</strong>
-                        </div>
-                        <Value color={'positivo'}>3000,00</Value>
-                    </ListItemContainer>
-                </ul>
-
-                <article>
-                    <strong>Saldo</strong>
-                    <Value color={'positivo'}>2880,00</Value>
-                </article>
+                        <article>
+                            <strong>Saldo</strong>
+                            <Value color={ total >= 0 ? 'deposit' : 'spent' }>{total}</Value>
+                        </article>
+                    </>
+                    :
+                    <MessageContainer>
+                          Não há registros de entrada ou saída
+                    </MessageContainer>}
             </TransactionsContainer>
 
+                
 
             <ButtonsContainer>
-                <button>
+                <button onClick={()=>newTransaction('deposit')}>
                     <AiOutlinePlusCircle />
                     <p>Nova <br /> entrada</p>
                 </button>
-                <button>
+    
+                <button onClick={()=>newTransaction('spent')}>
                     <AiOutlineMinusCircle />
                     <p>Nova <br />saída</p>
-                </button>
+                </button>                
             </ButtonsContainer>
 
         </HomeContainer>
@@ -73,7 +117,8 @@ const TransactionsContainer = styled.article`
   padding: 16px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: ${(props) => (props.hasTransactions ? 'initial' : 'center')};
+  justify-content: ${(props) => (props.hasTransactions ? 'space-between' : 'center')};
   article {
     display: flex;
     justify-content: space-between;   
@@ -82,6 +127,11 @@ const TransactionsContainer = styled.article`
       text-transform: uppercase;
     }
   }
+  ul{
+    max-height : 95%;
+    overflow: scroll;
+  }
+  max-height : 68%;
 `;
 const ButtonsContainer = styled.section`
   margin-top: 15px;
@@ -105,7 +155,7 @@ const ButtonsContainer = styled.section`
 const Value = styled.div`
   font-size: 16px;
   text-align: right;
-  color: ${(props) => (props.color === 'positivo' ? 'green' : 'red')};
+  color: ${(props) => (props.color === 'deposit' ? 'green' : 'red')};
 `;
 const ListItemContainer = styled.li`
   display: flex;
@@ -118,4 +168,11 @@ const ListItemContainer = styled.li`
     color: #c6c6c6;
     margin-right: 10px;
   }
+`;
+
+const MessageContainer = styled.div`
+  display: flex;
+  width: 150px;
+  text-align: center;
+  color: #868686;
 `;

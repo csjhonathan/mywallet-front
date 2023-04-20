@@ -5,6 +5,9 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'Raleway';
         font-style: normal;
         font-weight: 400;
+        ::-webkit-scrollbar{
+            display: none;
+        }
     }
     button {
         outline: none;

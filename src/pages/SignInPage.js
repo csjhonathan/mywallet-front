@@ -14,7 +14,7 @@ export default function SignInPage() {
     }
     useEffect(()=>{
         if(localStorage.token && localStorage.userName ){
-            setUserData({...userData, token : localStorage.token, userName : localStorage.userName});
+            setUserData({...userData, token : localStorage.token, username : localStorage.userName});
             navigate('/home');
         }
     }, []);
@@ -29,7 +29,7 @@ export default function SignInPage() {
         try{
             /* eslint-disable-next-line no-undef */
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/sign-in`, body);
-            setUserData({...userData, token : response.data.token, userName : response.data.nome});
+            setUserData({...userData, token : response.data.token, username : response.data.nome});
 
             localStorage.clear();
             localStorage.setItem('token', response.data.token);
@@ -63,7 +63,7 @@ export default function SignInPage() {
                 <button>Entrar</button>
             </form>
 
-            <Link>
+            <Link to = {'/cadastro'}>
         Primeira vez? Cadastre-se!
             </Link>
         </SingInContainer>

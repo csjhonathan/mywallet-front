@@ -7,7 +7,7 @@ import TransactionsPage from './pages/TransactionPage';
 import UserContext from './contextAPI/userContext';
 import { useState } from 'react';
 export default function App() {
-    const [userData, setUserData] = useState({token : '', userName : ''});
+    const [userData, setUserData] = useState({token : '', username : ''});
     return (
         <UserContext.Provider value={{userData, setUserData}} >
             <PagesContainer>
@@ -25,8 +25,8 @@ export default function App() {
 }
 
 const PagesContainer = styled.main`
-  background-color: #8c11be;
-  width: calc(100vw - 50px);
-  max-height: 100vh;
-  padding: 25px;
+    background-color: #8c11be;
+    width: calc(100vw - 50px);
+    max-height: 100vh;
+    padding: 25px;
 `;
