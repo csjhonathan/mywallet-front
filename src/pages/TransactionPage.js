@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -14,6 +14,12 @@ export default function TransactionsPage() {
         setForm({...form, [key] : value});
     }
 
+    useEffect( () => {
+        if(!userData.token){
+            return navigate('/');
+        }
+    },[]);
+    
     async function sendTransaction(e){
         e.preventDefault();
         const body = {

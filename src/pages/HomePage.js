@@ -41,11 +41,16 @@ export default function HomePage() {
     function newTransaction(type){
         navigate(`/nova-transacao/${type}`);
     }
+
+    function logOut(){
+        localStorage.clear();
+        navigate('/');
+    }
     return (
         <HomeContainer>
             <Header>
                 <h1>Olá, {userData.username}</h1>
-                <BiExit />
+                <BiExit onClick={logOut}/>
             </Header>
             <TransactionsContainer hasTransactions = {!!transactions}>
                 {transactions && transactions.length > 0 ?
