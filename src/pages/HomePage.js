@@ -79,7 +79,7 @@ export default function HomePage() {
                                             <span>{transaction.date}</span>
                                             <strong>{transaction.description}</strong>
                                         </div>
-                                        <Value color={transaction.type}>{transaction.value.toFixed(2)} <Delete onClick={() => deleteTransaction(transaction.transactionID)}/> </Value>
+                                        <Value color={transaction.type}>{transaction?.value?.toFixed(2)} <Delete onClick={() => deleteTransaction(transaction.transactionID)}/> </Value>
                                         
                                     </ListItemContainer>
                                 );
