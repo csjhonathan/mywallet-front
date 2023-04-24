@@ -13,12 +13,12 @@ export default function SignInPage() {
         setForm({...form, [key] : value});
     }
     useEffect(()=>{
-
-        const {token, username} = JSON.parse(localStorage.getItem('myWalletData'));
-        console.log(token, username);
-        if(token && username ){
-            setUserData({...userData, token, username});
-            navigate('/home');
+        if(localStorage.getItem('myWalletData')){
+            const {token, username} = JSON.parse(localStorage.getItem('myWalletData'));
+            if(token && username ){
+                setUserData({...userData, token, username});
+                navigate('/home');
+            }
         }
     }, []);
     async function tryToLogin(e){
