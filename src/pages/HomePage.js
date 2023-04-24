@@ -98,7 +98,7 @@ export default function HomePage() {
                                             <span>{transaction.date}</span>
                                             <strong onClick={() => editTransactionByID(transaction.description, transaction.type, transaction.transactionID, Math.abs(transaction.value))}>{transaction.description}</strong>
                                         </div>
-                                        <Value color={transaction.type}>{Math.abs(transaction?.value)?.toFixed(2)} <Delete onClick={() => deleteTransaction(transaction.transactionID)}/> </Value>
+                                        <Value color={transaction.type}>{Math.abs(transaction?.value)?.toFixed(2).replace('.', ',')} <Delete onClick={() => deleteTransaction(transaction.transactionID)}/> </Value>
                                         
                                     </ListItemContainer>
                                 );
@@ -109,7 +109,7 @@ export default function HomePage() {
 
                         <article>
                             <strong>Saldo</strong>
-                            <Value color={ total >= 0 ? 'deposit' : 'spent' }>{Math.abs(total)?.toFixed(2)}</Value>
+                            <Value color={ total >= 0 ? 'deposit' : 'spent' }>{Math.abs(total)?.toFixed(2).replace('.', ',')}</Value>
                         </article>
                     </>
                     :

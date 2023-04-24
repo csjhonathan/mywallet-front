@@ -11,7 +11,7 @@ export default function EditTransactionPage(){
     const {userData } = useContext(UserContext);
     
     const {editTransactionData} = useContext(TransactionContext);
-    const [form, setForm] = useState({value :editTransactionData?.value.toFixed(2) , description : editTransactionData?.description});
+    const [form, setForm] = useState({value :editTransactionData?.value.toFixed(2).replace('.', ',') , description : editTransactionData?.description});
     
     useEffect( () => {
         if(!userData.token ){
