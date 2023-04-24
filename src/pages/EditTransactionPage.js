@@ -10,7 +10,7 @@ export default function EditTransactionPage(){
     const navigate = useNavigate();
     const {userData } = useContext(UserContext);
     
-    const {editTransactionData, setEditTransactionData} = useContext(TransactionContext);
+    const {editTransactionData} = useContext(TransactionContext);
     const [form, setForm] = useState({value :editTransactionData?.value.toFixed(2) , description : editTransactionData?.description});
     
     useEffect( () => {
@@ -40,9 +40,15 @@ export default function EditTransactionPage(){
             };
             const ID = editTransactionData.ID;
             await axios.put(`${process.env.REACT_APP_API_URL}/transactions/${ID}`, body, config);
-            navigate('/');
+            navigate('/home');
         }catch(err){
-            alert(err.response.data.message);
+            if(err.response.status === 401){
+                alert(`${err.response.data.message} Você será redirecionado para a tela de login!`);
+                logOut();
+                navigate('/');
+            }else{
+                alert(err.response.data.message);
+            }
         }
     }
 

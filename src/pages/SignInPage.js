@@ -13,8 +13,11 @@ export default function SignInPage() {
         setForm({...form, [key] : value});
     }
     useEffect(()=>{
-        if(localStorage.token && localStorage.userName ){
-            setUserData({...userData, token : localStorage.token, username : localStorage.userName});
+
+        const {token, username} = JSON.parse(localStorage.getItem('myWalletData'));
+        console.log(token, username);
+        if(token && username ){
+            setUserData({...userData, token, username});
             navigate('/home');
         }
     }, []);
@@ -29,11 +32,10 @@ export default function SignInPage() {
         try{
             /* eslint-disable-next-line no-undef */
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/sign-in`, body);
-            setUserData({...userData, token : response.data.token, username : response.data.nome});
-            localStorage.clear();
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('userName', response.data.nome);
+            const myWalletData = {...userData, token : response.data.token, username : response.data.nome};
 
+            localStorage.setItem('myWalletData', JSON.stringify(myWalletData));
+            setUserData({...userData, token : response.data.token, username : response.data.nome});
             navigate('/home');
         }catch(err){
             alert(err.response.data.message);

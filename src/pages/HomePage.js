@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TransactionContext from '../contextAPI/transactionContext.js';
 import axios from 'axios';
+import logOut from '../constants/logout.js';
 export default function HomePage() {
     const {userData} = useContext(UserContext);
     const {editTransactionData, setEditTransactionData} = useContext(TransactionContext);
@@ -35,16 +36,15 @@ export default function HomePage() {
             
         }catch(err){
             alert(err.response.data.message);
+            if(err.response.status === 401){
+                logOut();
+                navigate('/');
+            }
         }
     }
 
     function newTransaction(type){
         navigate(`/nova-transacao/${type}`);
-    }
-
-    function logOut(){
-        localStorage.clear();
-        navigate('/');
     }
 
     async function deleteTransaction(ID){
@@ -59,7 +59,13 @@ export default function HomePage() {
                 await axios.delete(`${process.env.REACT_APP_API_URL}/transactions/${ID}`, config);
                 getTransactions();
             }catch(err){
-                alert(err.response.data.message);
+                if(err.response.status === 401){
+                    alert(`${err.response.data.message} Você será redirecionado para a tela de login!`);
+                    logOut();
+                    navigate('/');
+                }else{
+                    alert(err.response.data.message);
+                }
             }
         }
     }
@@ -69,11 +75,17 @@ export default function HomePage() {
         setEditTransactionData({...editTransactionData, description, value, ID});
         navigate(`/editar-registro/${type}`);
     }
+
+    function exit(){
+        logOut();
+        navigate('/');
+    }
+
     return (
         <HomeContainer>
             <Header>
                 <h1>Olá, {userData.username}</h1>
-                <BiExit onClick={logOut}/>
+                <BiExit onClick={exit}/>
             </Header>
             <TransactionsContainer hasTransactions = {!(!!transactions && !transactions?.length || !transactions )}>
                 {transactions && transactions.length > 0 ?

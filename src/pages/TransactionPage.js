@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import UserContext from '../contextAPI/userContext.js';
+import logOut from '../constants/logout.js';
 
 export default function TransactionsPage() {
     const {tipo} = useParams();
@@ -28,9 +29,6 @@ export default function TransactionsPage() {
             type : tipo,
         };
         try{
-            if(!userData.token){
-                navigate('/');
-            }
             const config = {
                 headers : {
                     'Authorization' : `Bearer ${userData.token}`
@@ -40,7 +38,13 @@ export default function TransactionsPage() {
             await axios.post(`${process.env.REACT_APP_API_URL}/transactions`, body, config);
             navigate('/home');
         }catch(err){
-            alert(err.response.data.message);
+            if(err.response.status === 401){
+                alert(`${err.response.data.message} Você será redirecionado para a tela de login!`);
+                logOut();
+                navigate('/');
+            }else{
+                alert(err.response.data.message);
+            }
         }
     }
     return (
