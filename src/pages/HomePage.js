@@ -7,13 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import TransactionContext from '../contextAPI/transactionContext.js';
 import axios from 'axios';
 import logOut from '../constants/logout.js';
+import InfinityLoader from '../components/InfinityLoader.js';
 export default function HomePage() {
     const {userData} = useContext(UserContext);
     const {editTransactionData, setEditTransactionData} = useContext(TransactionContext);
     const [transactions, setTransactions] = useState(null);
     const [total, setTotal] = useState(null);
+    const [load, setLoad] =useState(false);
     const navigate = useNavigate();
-
     useEffect( () => {
         if(!userData.token){
             return navigate('/');
@@ -22,6 +23,7 @@ export default function HomePage() {
     },[]);
 
     async function getTransactions(){
+        setLoad(true);
         try{
             const config = {
                 headers : {
@@ -33,8 +35,9 @@ export default function HomePage() {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/transactions`, config);
             setTransactions(response.data.transactions);
             setTotal(response.data.total ? Number(response.data.total).toFixed(2) : '00.00');
-            
+            setLoad(false);
         }catch(err){
+            setLoad(false);
             alert(err.response.data.message);
             if(err.response.status === 401){
                 logOut();
@@ -87,8 +90,8 @@ export default function HomePage() {
                 <h1>Olá, {userData.username}</h1>
                 <BiExit onClick={exit}/>
             </Header>
-            <TransactionsContainer hasTransactions = {!(!!transactions && !transactions?.length || !transactions )}>
-                {transactions && transactions.length > 0 ?
+            <TransactionsContainer hasTransactions = {!(!!transactions && !transactions?.length || !transactions )} load = {load}>
+                {load ? <InfinityLoader/> : transactions && transactions.length > 0 ?
                     <>
                         <ul>
                             {transactions.map((transaction) => {
@@ -115,7 +118,8 @@ export default function HomePage() {
                     :
                     <MessageContainer>
                           Não há registros de entrada ou saída
-                    </MessageContainer>}
+                    </MessageContainer>
+                }
             </TransactionsContainer>
 
                 
@@ -158,8 +162,8 @@ const TransactionsContainer = styled.article`
   padding: 16px;
   display: flex;
   flex-direction: column;
-  align-items: ${(props) => (props.hasTransactions ? 'initial' : 'center')};
-  justify-content: ${(props) => (props.hasTransactions ? 'space-between' : 'center')};
+  align-items: ${(props) => (props.load ? 'center' : props.hasTransactions ? 'initial' : 'center')};
+  justify-content: ${(props) => (props.load ? 'center' : props.hasTransactions ? 'space-between' : 'center')};
   article {
     display: flex;
     justify-content: space-between;   

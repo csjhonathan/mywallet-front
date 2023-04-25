@@ -1,5 +1,4 @@
 function logOut(){
-  
     const logOut = {
         token : undefined,
         username : undefined

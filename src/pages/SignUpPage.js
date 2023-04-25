@@ -4,14 +4,17 @@ import MyWalletLogo from '../components/MyWalletLogo';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DotsLoader from '../components/DotsLoader.js';
 export default function SignUpPage() {
     const [form, setForm] = useState({nome : '', email : '', senha : '', confirma : ''});
     const navigate = useNavigate();
+    const [disabled, setDisabled] = useState(false);
     function handleForm(key, value){
         setForm({...form, [key] : value});
     }
     async function registerUser(e){
         e.preventDefault();
+        setDisabled(true);
         if(form.confirma !==  form.senha) {
             return alert('As senhas devem ser iguais!');
         }
@@ -24,8 +27,10 @@ export default function SignUpPage() {
             /* eslint-disable-next-line no-undef */
             await axios.post(`${process.env.REACT_APP_API_URL}/sign-up`, body);
             navigate('/');
+            setDisabled(false);
         }catch(err){
             alert(err.response.data.message);
+            setDisabled(false);
         }
     }
     return (
@@ -37,12 +42,14 @@ export default function SignUpPage() {
                     value={form.nome} 
                     onChange={(e) => handleForm(e.target.name, e.target.value)}
                     required
+                    disabled = {disabled}
                 />
                 <input placeholder="E-mail" 
                     type="email" name='email' 
                     value = {form.email} 
                     onChange={(e) => handleForm(e.target.name, e.target.value)}
                     required
+                    disabled = {disabled}
                 />
                 <input placeholder="Senha" 
                     type="password" 
@@ -52,6 +59,7 @@ export default function SignUpPage() {
                     onChange={(e) => handleForm(e.target.name, e.target.value)}
                     required
                     minLength={3}
+                    disabled = {disabled}
                 />
                 <input placeholder="Confirme a senha" 
                     name='confirma' 
@@ -61,8 +69,9 @@ export default function SignUpPage() {
                     onChange={(e) => handleForm(e.target.name, e.target.value)}
                     required
                     minLength={3}
+                    disabled = {disabled}
                 />
-                <button>Cadastrar</button>
+                <SigupButton disabled = {disabled} >{disabled ? <DotsLoader/> :'Cadastrar' }</SigupButton>
             </form>
 
             <Link to = {'/'}>
@@ -87,3 +96,11 @@ const SingUpContainer = styled.section`
         padding-top: 30px;
     }
 `;
+
+const SigupButton = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 48px;
+`;
+
