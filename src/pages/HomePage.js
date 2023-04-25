@@ -38,10 +38,12 @@ export default function HomePage() {
             setLoad(false);
         }catch(err){
             setLoad(false);
-            alert(err.response.data.message);
             if(err.response.status === 401){
+                alert(`${err.response.data.message} Você será redirecionado para a tela de login!`);
                 logOut();
                 navigate('/');
+            }else{
+                alert(err.response.data.message);
             }
         }
     }
