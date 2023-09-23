@@ -1,12 +1,9 @@
 <h1>MyWallet</h1>
-<hr></hr>
-
-##### MyWallet é uma aplicação de carteira que permite aos usuários realizar o cadastro e login, além de adicionar e gerenciar suas movimentações financeiras de entrada e saída para manter uma visibilidade clara de seus gastos e saldo total. Os principais recursos incluem o cadastro e login de usuários, o registro de movimentações com valores e descrições, a edição de movimentações, a exclusão de movimentações e a visualização do saldo total.
+<p>MyWallet é uma aplicação de carteira que permite aos usuários realizar o cadastro e login, além de adicionar e gerenciar suas movimentações financeiras de entrada e saída para manter uma visibilidade clara de seus gastos e saldo total. Os principais recursos incluem o cadastro e login de usuários, o registro de movimentações com valores e descrições, a edição de movimentações, a exclusão de movimentações e a visualização do saldo total.</p>
 
 <h2>Demo</h2>
 
 ![MyWallet Demo](./public/demo/myWallet-demo.gif)
-<hr></hr>
 
 <h3>Tecnologias e Ferramentas</h3>
 <hr></hr>
@@ -20,12 +17,12 @@ Este projeto foi desenvolvido utilizando as seguintes tecnologias e ferramentas:
 
 <h3>Pré-requisitos</h3>
 <hr></hr>
-Para executar a aplicação MyWallet, é necessário ter um backend compatível. Você pode encontrar o backend correspondente neste repositório: [MyWallet Backend](https://github.com/csjhonathan/mywallet-back). Além disso, é necessário ter o NodeJs instalado na sua máquina, caso não tenha, [clique aqui](https://nodejs.org/pt-br) para baixar.
+Para executar a aplicação MyWallet, é necessário ter um backend compatível. Você pode encontrar o backend correspondente neste repositório: <a href="https://github.com/csjhonathan/mywallet-back">MyWallet Backend</a> . Além disso, é necessário ter o NodeJs instalado na sua máquina, caso não tenha, <a href="https://nodejs.org/pt-br">clique aqui</a> para baixar.
 
 
 <h3>Deploy</h3>
 <hr></hr>
-A aplicação MyWallet está disponível online. Você pode acessá-la [aqui](https://projeto14-mywallet-front-fawn-omega.vercel.app/).
+A aplicação MyWallet está disponível online. Você pode acessá-la <a href="https://projeto14-mywallet-front-fawn-omega.vercel.app/">aqui</a>.
 
 <h3>Configuração</h3>
 <hr></hr>
