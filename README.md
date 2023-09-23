@@ -1,70 +1,54 @@
-# Getting Started with Create React App
+<h1>MyWallet</h1>
+<hr></hr>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+##### MyWallet é uma aplicação de carteira que permite aos usuários realizar o cadastro e login, além de adicionar e gerenciar suas movimentações financeiras de entrada e saída para manter uma visibilidade clara de seus gastos e saldo total. Os principais recursos incluem o cadastro e login de usuários, o registro de movimentações com valores e descrições, a edição de movimentações, a exclusão de movimentações e a visualização do saldo total.
 
-## Available Scripts
+<h2>Demo</h2>
 
-In the project directory, you can run:
+![MyWallet Demo](./public/demo/myWallet-demo.gif)
+<hr></hr>
 
-### `npm start`
+<h3>Tecnologias e Ferramentas</h3>
+<hr></hr>
+Este projeto foi desenvolvido utilizando as seguintes tecnologias e ferramentas:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- ***React***: Uma biblioteca JavaScript para construir interfaces de usuário interativas e reativas.
+- ***Axios***: Uma biblioteca para fazer requisições HTTP em aplicativos JavaScript, facilitando a comunicação com servidores.
+- ***Material-UI (mui/material)***: Uma biblioteca de design e componentes prontos para uso com base nas diretrizes de Material Design do Google.
+- ***Styled Components***: Uma biblioteca para estilizar componentes React usando JavaScript e CSS dentro dos próprios componentes.
+- ***Local storage***: Uma API do navegador que permite armazenar dados de forma persistente no navegador do usuário, útil para armazenar informações localmente no lado do cliente.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+<h3>Pré-requisitos</h3>
+<hr></hr>
+Para executar a aplicação MyWallet, é necessário ter um backend compatível. Você pode encontrar o backend correspondente neste repositório: [MyWallet Backend](https://github.com/csjhonathan/mywallet-back). Além disso, é necessário ter o NodeJs instalado na sua máquina, caso não tenha, [clique aqui](https://nodejs.org/pt-br) para baixar.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<h3>Deploy</h3>
+<hr></hr>
+A aplicação MyWallet está disponível online. Você pode acessá-la [aqui](https://projeto14-mywallet-front-fawn-omega.vercel.app/).
 
-### `npm run build`
+<h3>Configuração</h3>
+<hr></hr>
+Antes de executar a aplicação, você precisará configurar as variáveis de ambiente necessárias. Para fazer isso, siga estas etapas:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Clone o repositório MyWallet**:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+`git clone https://github.com/seu-usuario/mywallet-front.git`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Navegue até a pasta do projeto**:
 
-### `npm run eject`
+`cd mywallet-front`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Crie um arquivo `.env` baseado no arquivo `.env.example` fornecido e preencha as variáveis de ambiente necessárias com suas configurações específicas.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Instale as dependências do projeto**:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+`npm install`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<h3>Executando a Aplicação</h3>
+<hr></hr>
+Após configurar as variáveis de ambiente e instalar as dependências, você pode iniciar a aplicação MyWallet com o seguinte comando:
 
-## Learn More
+`npm start`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Abra o seu navegador favorito e navegue até http://localhost:3000/ , onde a aplicação estará disponível por padrão.

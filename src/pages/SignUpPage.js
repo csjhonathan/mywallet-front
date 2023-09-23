@@ -16,6 +16,7 @@ export default function SignUpPage() {
         e.preventDefault();
         setDisabled(true);
         if(form.confirma !==  form.senha) {
+            setDisabled(false);
             return alert('As senhas devem ser iguais!');
         }
         const body = {

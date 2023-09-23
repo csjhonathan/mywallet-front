@@ -8,6 +8,7 @@ import TransactionContext from '../contextAPI/transactionContext.js';
 import axios from 'axios';
 import logOut from '../constants/logout.js';
 import InfinityLoader from '../components/InfinityLoader.js';
+
 export default function HomePage() {
     const {userData} = useContext(UserContext);
     const {editTransactionData, setEditTransactionData} = useContext(TransactionContext);
@@ -76,7 +77,6 @@ export default function HomePage() {
     }
 
     function editTransactionByID(description, type, ID, value){
-        
         setEditTransactionData({...editTransactionData, description, value, ID});
         navigate(`/editar-registro/${type}`);
     }
