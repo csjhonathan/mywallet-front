@@ -9,25 +9,25 @@ import { useState } from 'react';
 import EditTransactionPage from './pages/EditTransactionPage.js';
 import TransactionContext from './contextAPI/transactionContext.js';
 export default function App() {
-    const [userData, setUserData] = useState({token : '', username : ''});
-    const [editTransactionData, setEditTransactionData] = useState({description : '', value : '', ID : '' });
-    return (
-        <UserContext.Provider value={{userData, setUserData }} >
-            <TransactionContext.Provider value={{ editTransactionData, setEditTransactionData }}>
-                <PagesContainer>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<SignInPage />} />
-                            <Route path="/cadastro" element={<SignUpPage />} />
-                            <Route path="/home" element={<HomePage />} />
-                            <Route path="/nova-transacao/:tipo" element={<TransactionsPage />} />
-                            <Route path="/editar-registro/:tipo" element={<EditTransactionPage />} />
-                        </Routes>
-                    </BrowserRouter>
-                </PagesContainer>
-            </TransactionContext.Provider>
-        </UserContext.Provider>
-    );
+  const [userData, setUserData] = useState({token : '', username : ''});
+  const [editTransactionData, setEditTransactionData] = useState({description : '', value : '', ID : '' });
+  return (
+    <UserContext.Provider value={{userData, setUserData }} >
+      <TransactionContext.Provider value={{ editTransactionData, setEditTransactionData }}>
+        <PagesContainer>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<SignInPage />} />
+              <Route path="/cadastro" element={<SignUpPage />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/nova-transacao/:tipo" element={<TransactionsPage />} />
+              <Route path="/editar-registro/:tipo" element={<EditTransactionPage />} />
+            </Routes>
+          </BrowserRouter>
+        </PagesContainer>
+      </TransactionContext.Provider>
+    </UserContext.Provider>
+  );
 }
 
 const PagesContainer = styled.main`

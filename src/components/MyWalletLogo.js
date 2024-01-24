@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export default function MyWalletLogo() {
-    return (
-        <Text>MyWallet</Text>
-    );
+  return (
+    <Text>MyWallet</Text>
+  );
 }
 
 const Text = styled.h1`

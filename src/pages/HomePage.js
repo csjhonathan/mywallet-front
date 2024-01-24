@@ -10,136 +10,136 @@ import logOut from '../constants/logout.js';
 import InfinityLoader from '../components/InfinityLoader.js';
 
 export default function HomePage() {
-    const {userData} = useContext(UserContext);
-    const {editTransactionData, setEditTransactionData} = useContext(TransactionContext);
-    const [transactions, setTransactions] = useState(null);
-    const [total, setTotal] = useState(null);
-    const [load, setLoad] =useState(false);
-    const navigate = useNavigate();
-    useEffect( () => {
-        if(!userData.token){
-            return navigate('/');
+  const {userData} = useContext(UserContext);
+  const {editTransactionData, setEditTransactionData} = useContext(TransactionContext);
+  const [transactions, setTransactions] = useState(null);
+  const [total, setTotal] = useState(null);
+  const [load, setLoad] =useState(false);
+  const navigate = useNavigate();
+  useEffect( () => {
+    if(!userData.token){
+      return navigate('/');
+    }
+    getTransactions();
+  },[]);
+
+  async function getTransactions(){
+    setLoad(true);
+    try{
+      const config = {
+        headers : {
+          'Authorization' : `Bearer ${userData.token}`
         }
-        getTransactions();
-    },[]);
+      };
 
-    async function getTransactions(){
-        setLoad(true);
-        try{
-            const config = {
-                headers : {
-                    'Authorization' : `Bearer ${userData.token}`
-                }
-            };
-
-            /* eslint-disable-next-line no-undef */
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/transactions`, config);
-            setTransactions(response.data.transactions);
-            setTotal(response.data.total ? Number(response.data.total).toFixed(2) : '00.00');
-            setLoad(false);
-        }catch(err){
-            setLoad(false);
-            if(err.response.status === 401){
-                alert(`${err.response.data.message} Você será redirecionado para a tela de login!`);
-                logOut();
-                navigate('/');
-            }else{
-                alert(err.response.data.message);
-            }
-        }
-    }
-
-    function newTransaction(type){
-        navigate(`/nova-transacao/${type}`);
-    }
-
-    async function deleteTransaction(ID){
-        if(window.confirm('Deseja excluir esta transação ?')){
-            try{
-                const config = {
-                    headers : {
-                        'Authorization' : `Bearer ${userData.token}`
-                    }
-                };
-                /* eslint-disable-next-line no-undef */
-                await axios.delete(`${process.env.REACT_APP_API_URL}/transactions/${ID}`, config);
-                getTransactions();
-            }catch(err){
-                if(err.response.status === 401){
-                    alert(`${err.response.data.message} Você será redirecionado para a tela de login!`);
-                    logOut();
-                    navigate('/');
-                }else{
-                    alert(err.response.data.message);
-                }
-            }
-        }
-    }
-
-    function editTransactionByID(description, type, ID, value){
-        setEditTransactionData({...editTransactionData, description, value, ID});
-        navigate(`/editar-registro/${type}`);
-    }
-
-    function exit(){
+      /* eslint-disable-next-line no-undef */
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/transactions`, config);
+      setTransactions(response.data.transactions);
+      setTotal(response.data.total ? Number(response.data.total).toFixed(2) : '00.00');
+      setLoad(false);
+    }catch(err){
+      setLoad(false);
+      if(err.response.status === 401){
+        alert(`${err.response.data.message} Você será redirecionado para a tela de login!`);
         logOut();
         navigate('/');
+      }else{
+        alert(err.response.data.message);
+      }
     }
+  }
 
-    return (
-        <HomeContainer>
-            <Header>
-                <h1>Olá, {userData.username}</h1>
-                <BiExit onClick={exit}/>
-            </Header>
-            <TransactionsContainer hasTransactions = {!(!!transactions && !transactions?.length || !transactions )} load = {load}>
-                {load ? <InfinityLoader/> : transactions && transactions.length > 0 ?
-                    <>
-                        <ul>
-                            {transactions.map((transaction) => {
-                                return (
-                                    <ListItemContainer key={transaction.transactionID}>
-                                        <div>
-                                            <span>{transaction.date}</span>
-                                            <strong onClick={() => editTransactionByID(transaction.description, transaction.type, transaction.transactionID, Math.abs(transaction.value))}>{transaction.description}</strong>
-                                        </div>
-                                        <Value color={transaction.type}>{Math.abs(transaction?.value)?.toFixed(2).replace('.', ',')} <Delete onClick={() => deleteTransaction(transaction.transactionID)}/> </Value>
+  function newTransaction(type){
+    navigate(`/nova-transacao/${type}`);
+  }
+
+  async function deleteTransaction(ID){
+    if(window.confirm('Deseja excluir esta transação ?')){
+      try{
+        const config = {
+          headers : {
+            'Authorization' : `Bearer ${userData.token}`
+          }
+        };
+        /* eslint-disable-next-line no-undef */
+        await axios.delete(`${process.env.REACT_APP_API_URL}/transactions/${ID}`, config);
+        getTransactions();
+      }catch(err){
+        if(err.response.status === 401){
+          alert(`${err.response.data.message} Você será redirecionado para a tela de login!`);
+          logOut();
+          navigate('/');
+        }else{
+          alert(err.response.data.message);
+        }
+      }
+    }
+  }
+
+  function editTransactionByID(description, type, ID, value){
+    setEditTransactionData({...editTransactionData, description, value, ID});
+    navigate(`/editar-registro/${type}`);
+  }
+
+  function exit(){
+    logOut();
+    navigate('/');
+  }
+
+  return (
+    <HomeContainer>
+      <Header>
+        <h1>Olá, {userData.username}</h1>
+        <BiExit onClick={exit}/>
+      </Header>
+      <TransactionsContainer hasTransactions = {!(!!transactions && !transactions?.length || !transactions )} load = {load}>
+        {load ? <InfinityLoader/> : transactions && transactions.length > 0 ?
+          <>
+            <ul>
+              {transactions.map((transaction) => {
+                return (
+                  <ListItemContainer key={transaction.transactionID}>
+                    <div>
+                      <span>{transaction.date}</span>
+                      <strong onClick={() => editTransactionByID(transaction.description, transaction.type, transaction.transactionID, Math.abs(transaction.value))}>{transaction.description}</strong>
+                    </div>
+                    <Value color={transaction.type}>{Math.abs(transaction?.value)?.toFixed(2).replace('.', ',')} <Delete onClick={() => deleteTransaction(transaction.transactionID)}/> </Value>
                                         
-                                    </ListItemContainer>
-                                );
-                            })
+                  </ListItemContainer>
+                );
+              })
                         
-                            }
-                        </ul>
+              }
+            </ul>
 
-                        <article>
-                            <strong>Saldo</strong>
-                            <Value color={ total >= 0 ? 'deposit' : 'spent' }>{Math.abs(total)?.toFixed(2).replace('.', ',')}</Value>
-                        </article>
-                    </>
-                    :
-                    <MessageContainer>
+            <article>
+              <strong>Saldo</strong>
+              <Value color={ total >= 0 ? 'deposit' : 'spent' }>{Math.abs(total)?.toFixed(2).replace('.', ',')}</Value>
+            </article>
+          </>
+          :
+          <MessageContainer>
                           Não há registros de entrada ou saída
-                    </MessageContainer>
-                }
-            </TransactionsContainer>
+          </MessageContainer>
+        }
+      </TransactionsContainer>
 
                 
 
-            <ButtonsContainer>
-                <button onClick={()=>newTransaction('deposit')}>
-                    <AiOutlinePlusCircle />
-                    <p>Nova <br /> entrada</p>
-                </button>
+      <ButtonsContainer>
+        <button onClick={()=>newTransaction('deposit')}>
+          <AiOutlinePlusCircle />
+          <p>Nova <br /> entrada</p>
+        </button>
     
-                <button onClick={()=>newTransaction('spent')}>
-                    <AiOutlineMinusCircle />
-                    <p>Nova <br />saída</p>
-                </button>                
-            </ButtonsContainer>
+        <button onClick={()=>newTransaction('spent')}>
+          <AiOutlineMinusCircle />
+          <p>Nova <br />saída</p>
+        </button>                
+      </ButtonsContainer>
 
-        </HomeContainer>
-    );
+    </HomeContainer>
+  );
 }
 
 const HomeContainer = styled.div`

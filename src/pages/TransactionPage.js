@@ -6,76 +6,76 @@ import UserContext from '../contextAPI/userContext.js';
 import logOut from '../constants/logout.js';
 import DotsLoader from '../components/DotsLoader.js';
 export default function TransactionsPage() {
-    const {tipo} = useParams();
-    const [form, setForm] = useState({value : '', description : ''});
-    const {userData} = useContext(UserContext);
-    const [disabled, sedDisabled] = useState(false);
-    const navigate = useNavigate();
-    function handleForm(key, value){
+  const {tipo} = useParams();
+  const [form, setForm] = useState({value : '', description : ''});
+  const {userData} = useContext(UserContext);
+  const [disabled, sedDisabled] = useState(false);
+  const navigate = useNavigate();
+  function handleForm(key, value){
 
-        setForm({...form, [key] : value});
+    setForm({...form, [key] : value});
+  }
+
+  useEffect( () => {
+    if(!userData.token){
+      return navigate('/');
     }
-
-    useEffect( () => {
-        if(!userData.token){
-            return navigate('/');
-        }
-    },[]);
+  },[]);
     
-    async function sendTransaction(e){
-        e.preventDefault();
-        sedDisabled(true);
-        const body = {
-            value : Number(form.value.replace(',', '.')),
-            description : form.description,
-            type : tipo,
-        };
-        try{
-            const config = {
-                headers : {
-                    'Authorization' : `Bearer ${userData.token}`
-                }
-            };
-            /* eslint-disable-next-line no-undef */
-            await axios.post(`${process.env.REACT_APP_API_URL}/transactions`, body, config);
-            sedDisabled(false);
-            navigate('/home');
-        }catch(err){
-            sedDisabled(false);
-            if(err.response.status === 401){
-                alert(`${err.response.data.message} Você será redirecionado para a tela de login!`);
-                logOut();
-                navigate('/');
-            }else{
-                alert(err.response.data.message);
-            }
+  async function sendTransaction(e){
+    e.preventDefault();
+    sedDisabled(true);
+    const body = {
+      value : Number(form.value.replace(',', '.')),
+      description : form.description,
+      type : tipo,
+    };
+    try{
+      const config = {
+        headers : {
+          'Authorization' : `Bearer ${userData.token}`
         }
+      };
+      /* eslint-disable-next-line no-undef */
+      await axios.post(`${process.env.REACT_APP_API_URL}/transactions`, body, config);
+      sedDisabled(false);
+      navigate('/home');
+    }catch(err){
+      sedDisabled(false);
+      if(err.response.status === 401){
+        alert(`${err.response.data.message} Você será redirecionado para a tela de login!`);
+        logOut();
+        navigate('/');
+      }else{
+        alert(err.response.data.message);
+      }
     }
-    return (
-        <TransactionsContainer>
-            <h1>Nova {tipo === 'deposit' ? 'entrada' : 'saída'}</h1>
-            <form onSubmit={sendTransaction}> 
-                <input placeholder="Valor" 
-                    type = "text"
-                    name = "value"
-                    required
-                    value={form.value}
-                    onChange={(e) => handleForm(e.target.name, e.target.value)}
-                    disabled = {disabled}
-                />
-                <input placeholder="Descrição" 
-                    type="text"
-                    name = "description" 
-                    required
-                    value={form.description}
-                    onChange={(e) => handleForm(e.target.name, e.target.value)}
-                    disabled = {disabled}
-                />
-                <SendButton disabled = {disabled}>{disabled ? <DotsLoader/> : `Salvar ${tipo === 'deposit' ? 'entrada' : 'saída'}`}</SendButton>
-                <CancelButton disabled = {disabled} onClick={()=> navigate('/home')}>Cancelar</CancelButton>
-            </form>
-        </TransactionsContainer>
-    );
+  }
+  return (
+    <TransactionsContainer>
+      <h1>Nova {tipo === 'deposit' ? 'entrada' : 'saída'}</h1>
+      <form onSubmit={sendTransaction}> 
+        <input placeholder="Valor" 
+          type = "text"
+          name = "value"
+          required
+          value={form.value}
+          onChange={(e) => handleForm(e.target.name, e.target.value)}
+          disabled = {disabled}
+        />
+        <input placeholder="Descrição" 
+          type="text"
+          name = "description" 
+          required
+          value={form.description}
+          onChange={(e) => handleForm(e.target.name, e.target.value)}
+          disabled = {disabled}
+        />
+        <SendButton disabled = {disabled}>{disabled ? <DotsLoader/> : `Salvar ${tipo === 'deposit' ? 'entrada' : 'saída'}`}</SendButton>
+        <CancelButton disabled = {disabled} onClick={()=> navigate('/home')}>Cancelar</CancelButton>
+      </form>
+    </TransactionsContainer>
+  );
 }
 
 const TransactionsContainer = styled.main`
